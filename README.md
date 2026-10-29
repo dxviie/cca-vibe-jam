@@ -2,6 +2,8 @@
 
 A [raylib](https://www.raylib.com/) game skeleton in C. The same source builds as a native desktop app and as a WebAssembly page that gets published to GitHub Pages.
 
+Play it at https://dxviie.github.io/cca-vibe-jam/
+
 ## Layout
 
 ```
@@ -52,6 +54,12 @@ After that, every push to the default branch builds the web version and deploys 
 ## Web gotchas
 
 - **Main loop:** the browser owns the loop. `main.c` hands `UpdateDrawFrame` to `emscripten_set_main_loop` on the web and uses a normal `while (!WindowShouldClose())` loop on desktop. Keep all per-frame work inside `UpdateDrawFrame`.
+- **Screen size:** the canvas fills the browser window and follows resizes and rotation (`FLAG_WINDOW_RESIZABLE`). The scene is laid out in design pixels, 450 across the shorter screen side, and scaled to match, so it keeps its proportions at any size or aspect ratio. Use `GetScreenWidth()`/`GetScreenHeight()` every frame rather than fixed sizes.
+- **Touch:** a single-finger tap counts as a left click, so `IsMouseButtonPressed` and `GetMousePosition` work on phones.
 - **Assets:** everything in `assets/` is packed into `index.data` and mounted at `/assets`, so `LoadTexture("assets/foo.png")` works on both platforms. Writing files at runtime only goes to an in-memory filesystem on the web.
 - **Audio:** browsers keep audio muted until the user clicks or presses a key, so start music after the first input.
 - **Graphics:** the web build uses WebGL (OpenGL ES 2.0). Custom shaders need `#version 100` GLSL ES variants.
+
+## License
+
+[MIT](LICENSE)
